@@ -24,6 +24,7 @@ jobs:
     - name: Build project
       run: |
         npm run build
+        # on place package.json à côté d'entry.mjs pour installer les deps runtime
         cp package.json dist/server/
 
     - name: Deploy to VPS via SCP
@@ -33,14 +34,14 @@ jobs:
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22021
-        source: "package.json, dist/*"
+        source: "dist/*"            # << PAS de package.json racine ici
         target: "/var/www/svg/"
         strip_components: 1
         rm: false
         overwrite: true
         debug: true
 
-    - name: Install production dependencies on VPS
+    - name: Install production dependencies on VPS & (re)start PM2
       uses: appleboy/ssh-action@v1.0.0
       with:
         host: ${{ secrets.HOST }}
@@ -49,9 +50,13 @@ jobs:
         port: 22021
         script: |
           set -e
+          # crée le dossier si besoin
+          mkdir -p /var/www/svg/server
           cd /var/www/svg/server
-          npm i
+          # installe les deps pour entry.mjs (package.json a été copié juste avant)
+          npm ci
           npm install astro
           npm install send server-destroy
+          # lance sur le port dédié 8083 avec un nom PM2 distinct
           PORT=8083 pm2 restart collepra || PORT=8083 pm2 start entry.mjs --name collepra
           pm2 save
