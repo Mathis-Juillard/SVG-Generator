@@ -34,7 +34,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22021
         source: "dist/*"
-        target: "/var/www/r312s/"
+        target: "/var/www/r312/"
         strip_components: 1
         rm: false
         overwrite: true
@@ -49,8 +49,8 @@ jobs:
         port: 22021
         script: |
           set -e
-          cd /var/www/r312s/server
-          npm ci
+          cd /var/www/r312/server
+          npm i
           npm install astro
           npm install send server-destroy
           PORT=8082 pm2 restart r312 || PORT=8082 pm2 start entry.mjs --name r312
