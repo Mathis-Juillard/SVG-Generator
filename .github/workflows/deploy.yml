@@ -34,7 +34,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22021
         source: "package.json, dist/*"
-        target: "/var/www/r312/"
+        target: "/var/www/svg/"
         strip_components: 1
         rm: false
         overwrite: true
@@ -49,9 +49,9 @@ jobs:
         port: 22021
         script: |
           set -e
-          cd /var/www/r312/server
+          cd /var/www/svg/server
           npm i
           npm install astro
           npm install send server-destroy
-          PORT=8082 pm2 restart r312 || PORT=8082 pm2 start entry.mjs --name r312
+          PORT=8083 pm2 restart collepra || PORT=8083 pm2 start entry.mjs --name collepra
           pm2 save
