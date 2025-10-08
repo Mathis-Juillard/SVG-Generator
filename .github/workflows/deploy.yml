@@ -50,7 +50,7 @@ jobs:
         script: |
           set -e
           cd /var/www/r312/server
-          npm ci
+          npm i
           npm install astro
           npm install send server-destroy
           PORT=8082 pm2 restart r312 || PORT=8082 pm2 start entry.mjs --name r312
