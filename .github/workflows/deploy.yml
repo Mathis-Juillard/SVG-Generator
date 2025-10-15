@@ -49,14 +49,9 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22021
         script: |
-          set -e
-          # crée le dossier si besoin
           mkdir -p /var/www/svg/server
           cd /var/www/svg/server
-          # installe les deps pour entry.mjs (package.json a été copié juste avant)
-          npm ci
           npm install astro
           npm install send server-destroy
-          # lance sur le port dédié 8083 avec un nom PM2 distinct
           PORT=8083 pm2 restart collepra || PORT=8083 pm2 start entry.mjs --name collepra
           pm2 save
