@@ -53,5 +53,5 @@ jobs:
           cd /var/www/svg/server
           npm install astro
           npm install send server-destroy
-          PORT=8083 pm2 restart collepra || PORT=8083 pm2 start entry.mjs --name collepra
+          PORT=8084 pm2 restart collepra || PORT=8084 pm2 start entry.mjs --name collepra
           pm2 save
